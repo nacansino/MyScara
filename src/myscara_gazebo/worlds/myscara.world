@@ -3,12 +3,12 @@
   <!-- We use a custom world for the rrbot so that the camera angle is launched correctly -->
 
   <world name="default">
-    <!--include>
-      <uri>model://willowgarage</uri>
-    </include-->
+    <include>
+      <uri>model://willowgarage</uri> <!-- garage -->
+    </include>
 
     <include>
-      <uri>model://ground_plane</uri>
+      <uri>model://ground_plane</uri> <!-- floor -->
     </include>
 
     <!-- Global light source -->
