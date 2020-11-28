@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!--The robot URDF-->
+    <param name="robot_description" command="$(find xacro)/xacro '$(find myscara_description)/urdf/myscara.xacro'"/>
+
+    <!-- send joint values 
+         this describes to RViz how the wheels are attached to the main body
+    -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+        <param name="use_gui" value="False"/>
+    </node>
+
+    <!-- ...and the robot state -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+    <!-- Show in Rviz   -->
+    <node name="rviz" pkg="rviz" type="rviz"/>
+    <!--node name="rviz" pkg="rviz" type="rviz" args="-d $(find mybot_description)/launch/myrobot.rviz"/-->
+
+</launch>
