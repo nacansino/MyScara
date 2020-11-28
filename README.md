@@ -1,6 +1,12 @@
-# How I made this dir
+# SCARA Robot Simulation in Gazebo with ROS
 
-## 1 .Building the ROS directory using `catkin_make`
+## Installing ROS
+- http://wiki.ros.org/ROS/Installation
+- We used ros-noetic
+
+## How I built the code
+
+### 1 .Building the ROS directory using `catkin_make`
 ```bash
 cd ~
 mkdir -p myscara/src # -p option also creates the parent directories
@@ -9,7 +15,7 @@ catkin_make
 echo "source ~/.myscara/devel/setup.bash" >> ~/.bashrc # Adds workspace to search path
 ```
 
-## 2. Create the gazebo world as a ROS package (catkin_create_pkg)
+### 2. Create the gazebo world as a ROS package (catkin_create_pkg)
 ```bash
 cd ~/myscara/src
 catkin_create_pkg myscara_gazebo
@@ -48,7 +54,7 @@ Further, we need the description of the gazebo world. Create a file called `mysc
 
 ```
 
-## 3. Create the robot as a ROS package
+### 3. Create the robot as a ROS package
 ```bash
 cd ~/myscara/src
 catkin_create_pkg myscara_description   # we call this description because it describes our robot
@@ -61,7 +67,7 @@ We need the [urdf](http://wiki.ros.org/urdf) that represents our robot model. Th
 - macros.xacro
 - materials.xacro
 
-## 4. Launch gazebo through `roslaunch`
+### 4. Launch gazebo through `roslaunch`
 ```bash
 roslaunch myscara_gazebo myscara_world.launch
 ```
@@ -74,7 +80,7 @@ sudo killall gzclient
 roslaunch myscara_gazebo myscara_world.launch
 ```
 
-## 5. Try to control the robot manually by publishing to the ros `/cmd_vel` topic
+### 5. Try to control the robot manually by publishing to the ros `/cmd_vel` topic
 
 Try to publish commands to control the robot:
 ```bash
@@ -87,3 +93,53 @@ angular:
   y: 0.0
   z: 2.0"
 ```
+
+### 6. Connecting RViz
+
+To connect to RViz, create the file `myscara_rviz.launch`.
+
+```xml
+<?xml version="1.0"?>
+<launch>
+
+  <param name="robot_description" command="$(find xacro)/xacro '$(find myscara_description)/urdf/myscara.xacro'"/>
+
+  <!-- send fake joint values -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="False"/>
+  </node>
+
+  <!-- Combine joint values -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+
+  <!-- Show in Rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz"/>
+  <!--node name="rviz" pkg="rviz" type="rviz" args="-d $(find mybot_description)/launch/myrobot.rviz"/-->
+
+</launch>
+
+
+```
+Try to launch RViz:
+
+```bash 
+#!/bin/bash                                                                     
+
+roslaunch myscara_description myscara_rviz.launch
+
+```
+
+## Useful ROS commands
+1. rqt_graph - shows the node graph of ROS messages
+
+
+## Pitfalls
+
+1. RLException: [xxx.launch] is neither a launch file in package...
+- This is most likely caused when you created a new launch file but has not rerun the `deve/setup.bash` script inside the workspace.
+
+## Potential References
+
+1. https://github.com/yangliu28/two_scara_collaboration#progress-and-problems-may-3-2016
+2. http://gazebosim.org/tutorials?tut=build_model
+3. https://howtomechatronics.com/projects/scara-robot-how-to-build-your-own-arduino-based-robot/
