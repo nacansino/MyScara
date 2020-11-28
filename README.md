@@ -1,4 +1,4 @@
-# SCARA Robot Simulation in Gazebo with ROS
+# SCARA Robot Simulation in Gazebo with ROS (WIP)
 
 ## Installing ROS
 - http://wiki.ros.org/ROS/Installation
@@ -36,7 +36,7 @@ Further, we need the description of the gazebo world. Create a file called `mysc
       <uri>model://ground_plane</uri> <!-- floor -->
     </include>
 
-    <!-- Global light source -->
+Copyright (C) 2019 Artifex Software, Inc.  All rights reserved.
     <include>
       <uri>model://sun</uri>
     </include>
@@ -137,6 +137,12 @@ roslaunch myscara_description myscara_rviz.launch
 
 1. RLException: [xxx.launch] is neither a launch file in package...
 - This is most likely caused when you created a new launch file but has not rerun the `deve/setup.bash` script inside the workspace.
+
+## ToDo
+- Create SDF for the SCARA robot arm using the models in `scaramodels/`
+- Add custom end-effector for the spindle disposer. 
+- Create sample end-effector controller.
+- Connect the end-effector controller to a G-Code parser (can use parts of [GRBL](https://github.com/grbl/grbl)).
 
 ## Potential References
 
